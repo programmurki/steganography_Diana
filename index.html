@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тайный кот</title>
+    <style>
+       :root {
+    --dark: #121212;            /* Основной тёмный фон */
+    --darker: #0a0a0a;          /* Акцентный тёмный */
+    --accent: #ffeb3b;          /* Яркий жёлтый - основной акцент */
+    --text: #e0e0e0;            /* Светлый текст */
+    --secondary: #ffc107;       /* Золотистый для второстепенных элементов */
+    --success: #8bc34a;         /* Зеленоватый для успеха (контраст с жёлтым) */
+    --error: #ff5252;           /* Ярко-красный для ошибок */
+}
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--dark);
+             overflow: hidden;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+        }
+
+        h2, h3 {
+            color: var(--secondary);
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--accent);
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            background: var(--darker);
+            border-radius: 5px 5px 0 0;
+            font-size: 0.9rem;
+        }
+
+        .tab:hover {
+            background: var(--accent);
+            color: black;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: black;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 15px;
+            background: var(--darker);
+            border-radius: 0 5px 5px 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            background: var(--dark);
+            border: 1px solid var(--accent);
+            color: white;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+        }
+
+
+.file-upload {
+    display: inline-block;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.file-upload button {
+    margin-bottom: 0;
+}
+
+.file-input-hidden {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+        button {
+            background: var(--accent);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        button:hover {
+            background: var(--secondary);
+        }
+
+        .message {
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .success {
+            background: var(--success);
+        }
+
+        .error {
+            background: var(--error);
+        }
+
+
+        canvas {
+            max-width: 100%;
+            max-height: 300px;
+            background: var(--dark);
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: var(--secondary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .cat-emoji {
+            font-size: 1em;
+            vertical-align: middle;
+        }
+
+        .cat-fact {
+            background-color: var(--darker);
+            padding: 0.8rem;
+            border-left: 3px solid var(--accent);
+            margin: 0.8rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .interactive-demo {
+            display: flex;
+            margin: 1rem 0;
+            flex-direction: column;
+        }
+
+        .demo-controls {
+            width: 100%;
+            padding: 0.8rem;
+            box-sizing: border-box;
+        }
+
+        .demo-visual {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 8px 0;
+        }
+
+        .method-selector {
+            display: flex;
+            margin-bottom: 15px;
+            background: var(--dark);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .method-tab {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            border-right: 1px solid var(--darker);
+            font-size: 0.9rem;
+        }
+
+        .method-tab:last-child {
+            border-right: none;
+        }
+
+        .method-tab:hover {
+            background: var(--accent);
+            color: black;
+        }
+
+        .method-tab.active {
+            background: var(--accent);
+            color: black;
+        }
+
+        .method-content {
+            display: none;
+        }
+
+        .method-content.active {
+            display: block;
+        }
+
+        .info-card {
+            background: var(--dark);
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .panel {
+            background: var(--dark);
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid var(--accent);
+        }
+
+        .panel-title {
+            color: var(--secondary);
+            margin-top: 0;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .analogy {
+            background: var(--darker);
+            padding: 12px;
+            border-radius: 5px;
+            margin: 12px 0;
+            border-left: 3px solid var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .analogy-title {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 15px;
+                max-width: 1200px;
+            }
+            
+            .interactive-demo {
+                flex-direction: row;
+            }
+            
+            .demo-controls {
+                flex: 1;
+                min-width: 300px;
+            }
+            
+            .demo-visual {
+                flex: 1;
+                min-width: 300px;
+            }
+        }
+.visualization-wrapper {
+    position: relative;
+    margin-top: 10px;
+}
+
+.space-visualization-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--darker);
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.space-visualization-line {
+    font-family: 'JetBrains Mono', monospace;
+    white-space: pre;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.space-0 {
+    background: var(--dark);
+    color: #aaa;
+}
+
+.space-1 {
+    background: var(--accent);
+    color: white;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- <h1>Тайный кот <span class="cat-emoji">😼</span></h1> -->
+
+        <div class="tabs">
+            <div class="tab active" onclick="openTab('theory')">Как это работает?</div>
+            <div class="tab" onclick="openTab('image-stego')">Секрет в картинке</div>
+            <div class="tab" onclick="openTab('text-stego')">Секрет в тексте</div>
+        </div>
+
+      <!-- Теоретическая вкладка -->
+<div id="theory" class="tab-content active">
+    <h2 style="color: #e0e0e0;">Поздравляем, агент! <span class="cat-emoji">🕵️‍♂️🐾</span> Ты принят в секретное агентство "Тайный Кот". Сегодня тебе предстоит узнать, как
+        прятать и находить тайные сообщения. Готов? Тогда начнем! </h2>
+     <div class="analogy">
+                <div class="analogy-title">Криптография vs Стеганография:</div>
+                <ul>
+                    <li><strong>Криптография:</strong> Все знают, что сообщение есть, но прочитать его могут только те,
+                        у кого есть ключ. Это как сейф с кодом!</li>
+                    <li><strong>Стеганография:</strong> Сообщение спрятано так, что никто даже не догадывается о его
+                        существовании. Как тайный вход за картиной!</li>
+                </ul>
+            </div>
+    <div class="content-container" style="display: flex; gap: 20px; align-items: flex-start;">
+        <!-- Левая сторона: картинки -->
+        <div class="left-content" style="flex: 1;">
+                  
+            <!-- Задание 1: Найди сообщение в картинке -->
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <h3>📸 Задание 1: Найди секрет в картинке</h3>
+                    <p>Перед тобой изображение. Оно кажется обычным, но на самом деле внутри спрятано сообщение. Передвигай
+                        ползунок, чтобы обнаружить его:</p>
+                    <input type="range" min="0" max="100" value="0" id="stego-slider" oninput="updateDemo()">
+                    <p id="stego-explanation">На уровне 0% видно только обычную картинку. При 100% проявляется секретное
+                        сообщение!</p>
+                </div>
+            </div>
+            <div class="demo-visual">
+            <canvas id="stego-canvas" width="300" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- Правая сторона: текст -->
+        <div class="right-content" style="flex: 1;">
+        
+            
+            <!-- Задание 2: Найди секрет в тексте -->
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <h3>✍️ Задание 2: Найди секретное сообщение в тексте <span class="cat-emoji">🐱‍👓</span></h3>
+                    <p>В этом тексте спрятано секретное сообщение с помощью пробелов после слов:</p>
+
+                    <div id="hidden-text-exercise" class="stego-text" 1 1 1 1 0 1 0 1 1
+                        style="white-space: pre-wrap; background: var(--dark); padding: 8px; border-radius: 5px;">Кошка  сидит  на окне. За  окном  летают птицы.  Кошка  внимательно  смотрит на них и мечтает о  охоте.  Это  просто  текст  для  примера, чтобы  было больше  слов.  </div>
+
+                   <div class="space-counter-tool" style="margin-top: 12px;">
+    <button onclick="showSpacesExercise()">Показать пробелы</button>
+    <button onclick="countSpacesForMeExercise()">Посчитать пробелы</button>
+    <div class="visualization-wrapper">
+        <div id="space-visualization-exercise" class="space-visualization-container" style="display:none;"></div>
+    </div>
+</div>
+
+                    <div class="decoding-instructions" style="margin-top: 15px;">
+                        <h4>1 пробел = 0, 2 пробела = 1</h4>
+                        <ul>
+                            <li>Посчитай пробелы после каждого слова (нажми кнопку "Показать пробелы")</li>
+                            <li>Запиши последовательность нулей и единиц</li>
+                        </ul>
+                    </div>
+
+                    <div class="decoding-area" style="margin-top: 15px;">
+                        <input type="text" id="binary-code-exercise" placeholder="Пример: 01001000 01101001"
+                            style="width: 100%;">
+                        <button onclick="decodeBinaryExercise()">Расшифровать</button>
+                        <div id="decoded-message-exercise" class="message" style="margin-top: 8px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+        <!-- Секрет в картинке -->
+        <div id="image-stego" class="tab-content">
+            <h2>Спрячь секрет в картинке <span class="cat-emoji">🐱‍👀</span></h2>
+
+            <div class="method-selector">
+                <div class="method-tab active" onclick="openMethod('image-encode')">Спрятать сообщение</div>
+                <div class="method-tab" onclick="openMethod('image-decode')">Найти сообщение</div>
+            </div>
+
+          <!-- Шифрование -->
+            <div id="image-encode" class="method-content active">
+               <div class="panel">
+    <h3 class="panel-title">Шаг 1: Выбери картинку</h3>
+    <div class="file-upload">
+        <button>Выбрать картинку</button>
+        <input type="file" id="image-input" accept="image/*" class="file-input-hidden">
+    </div>
+    <canvas id="image-preview" width="500" height="300"></canvas>
+</div>
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 2: Введи секретное сообщение</h3>
+                    <textarea id="secret-text" rows="5" placeholder="Напиши здесь свой секрет..."></textarea>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 3: Спрячь сообщение</h3>
+                    <button onclick="hideTextInImage()" id="hide-image-btn">Спрятать сообщение</button>
+                    <button onclick="downloadImage()" id="download-image-btn" style="display:none;">Скачать картинку с
+                        секретом</button>
+                    <div id="image-message" class="message" style="display:none;"></div>
+                </div>
+            </div>
+
+            <!-- Дешифрование -->
+            <div id="image-decode" class="method-content">
+              <div class="panel">
+    <h3 class="panel-title">Шаг 1: Загрузи картинку с секретом</h3>
+    <div class="file-upload">
+        <button>Выбрать картинку</button>
+        <input type="file" id="decode-image-input" accept="image/*" class="file-input-hidden">
+    </div>
+    <canvas id="decode-image-preview" width="500" height="300"></canvas>
+</div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 2: Найди спрятанное сообщение</h3>
+                    <button onclick="extractTextFromImage()" id="extract-image-btn">Найти сообщение</button>
+                    <div id="decode-message" class="message" style="display:none;"></div>
+                    <textarea id="extracted-text" rows="5" placeholder="Здесь появится найденный секрет..."
+                        readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Секрет в тексте -->
+        <div id="text-stego" class="tab-content">
+            <h2>Спрячь секрет в тексте <span class="cat-emoji">🐱‍📝</span></h2>
+
+            <div class="method-selector">
+                <div class="method-tab active" onclick="openMethod('text-encode')">Спрятать сообщение</div>
+                <div class="method-tab" onclick="openMethod('text-decode')">Найти сообщение</div>
+            </div>
+
+            <!-- Шифрование -->
+            <div id="text-encode" class="method-content active">
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 1: Напиши обычный текст</h3>
+                    <p>Это будет "конверт" для твоего секрета. <strong>Кошачий совет:</strong> Для лучшей скрытности используй длинные тексты. Как кошки знают -
+                    чем больше коробка, тем удобнее в ней прятаться!</p>
+                    <textarea id="cover-text" rows="4" placeholder="Напиши здесь обычный текст..."></textarea>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 2: Введи секретное сообщение</h3>
+                    <textarea id="hidden-text" rows="4" placeholder="Напиши здесь свой секрет..."></textarea>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 3: Спрячь сообщение</h3>
+                    <button onclick="hideTextInText()" id="hide-text-btn">Спрятать сообщение</button>
+                    <button onclick="copyResultText()" id="copy-text-btn" style="display:none;">Копировать текст с
+                        секретом</button>
+                    <div id="text-message" class="message" style="display:none;"></div>
+                    <textarea id="result-text" rows="4" placeholder="Здесь появится текст с секретом..."
+                        readonly></textarea>
+                </div>
+            </div>
+
+            <!-- Дешифрование -->
+            <div id="text-decode" class="method-content">
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 1: Вставь текст с секретом</h3>
+                    <p>Это текст, в котором спрятано сообщение (например, из шага "Спрятать сообщение")</p>
+                    <textarea id="stego-text" rows="4" placeholder="Вставь сюда текст с секретом..."></textarea>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">Шаг 2: Найди спрятанное сообщение</h3>
+                    <button onclick="extractTextFromText()" id="extract-text-btn">Найти сообщение</button>
+                    <div id="decode-text-message" class="message" style="display:none;"></div>
+                    <textarea id="found-text" rows="4" placeholder="Здесь появится найденный секрет..."
+                        readonly></textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        // Глобальные переменные
+        let currentTab = 'theory';
+        let currentImageMethod = 'encode';
+        let currentTextMethod = 'encode';
+        let modifiedImageUrl = null;
+        let demoImagesLoaded = false;
+
+        // Инициализация при загрузке
+        window.onload = function () {
+            loadDemoImages();
+            document.getElementById('stego-slider').addEventListener('input', updateDemo);
+        };
+
+        // Функции для работы с вкладками
+        function openTab(tabName) {
+            // Скрываем все вкладки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Убираем активный класс у всех табов
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Показываем выбранную вкладку
+            document.getElementById(tabName).classList.add('active');
+
+            // Добавляем активный класс к выбранному табу
+            document.querySelector(`.tab[onclick="openTab('${tabName}')"]`).classList.add('active');
+
+            currentTab = tabName;
+        }
+
+        function openMethod(methodId) {
+            if (methodId.includes('image-')) {
+                // Для изображений
+                document.getElementById(`image-${currentImageMethod}`).classList.remove('active');
+                document.querySelector(`.method-tab[onclick="openMethod('image-${currentImageMethod}')"]`).classList.remove('active');
+
+                currentImageMethod = methodId.replace('image-', '');
+                document.getElementById(methodId).classList.add('active');
+                document.querySelector(`.method-tab[onclick="openMethod('${methodId}')"]`).classList.add('active');
+            } else if (methodId.includes('text-')) {
+                // Для текста
+                document.getElementById(`text-${currentTextMethod}`).classList.remove('active');
+                document.querySelector(`.method-tab[onclick="openMethod('text-${currentTextMethod}')"]`).classList.remove('active');
+
+                currentTextMethod = methodId.replace('text-', '');
+                document.getElementById(methodId).classList.add('active');
+                document.querySelector(`.method-tab[onclick="openMethod('${methodId}')"]`).classList.add('active');
+            }
+        }
+
+        // Демонстрация LSB
+        async function loadDemoImages() {
+            try {
+                await createDemoImages();
+                demoImagesLoaded = true;
+                updateDemo();
+            } catch (e) {
+                console.error("Error loading demo images:", e);
+                showMessage('theory', 'Ошибка загрузки демонстрационных изображений', 'error');
+            }
+        }
+
+        function createDemoImages() {
+            return new Promise((resolve) => {
+                const catCanvas = document.getElementById('stego-canvas');
+                const ctx = catCanvas.getContext('2d');
+
+                // Рисуем простого котика
+                ctx.fillStyle = '#6D4C41';
+                ctx.fillRect(0, 0, 400, 400);
+
+                // Тело
+                ctx.fillStyle = '#9E9E9E';
+                ctx.beginPath();
+                ctx.ellipse(200, 250, 120, 80, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Голова
+                ctx.beginPath();
+                ctx.arc(200, 150, 70, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Уши
+                ctx.fillStyle = '#757575';
+                ctx.beginPath();
+                ctx.moveTo(150, 100);
+                ctx.lineTo(170, 50);
+                ctx.lineTo(190, 100);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(210, 100);
+                ctx.lineTo(230, 50);
+                ctx.lineTo(250, 100);
+                ctx.fill();
+
+                // Глаза
+                ctx.fillStyle = '#212121';
+                ctx.beginPath();
+                ctx.arc(180, 140, 10, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(220, 140, 10, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Нос
+                ctx.beginPath();
+                ctx.moveTo(200, 150);
+                ctx.lineTo(190, 170);
+                ctx.lineTo(210, 170);
+                ctx.fill();
+
+                // Усы
+                ctx.strokeStyle = '#212121';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(190, 170);
+                    ctx.lineTo(120, 160 + i * 10);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(210, 170);
+                    ctx.lineTo(280, 160 + i * 10);
+                    ctx.stroke();
+                }
+
+                resolve();
+            });
+        }
+// Скрыть текст в изображении (LSB метод)
+        function hideTextInImage() {
+            const btn = document.getElementById('hide-image-btn');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loading"></span> Обработка...';
+                
+                const canvas = document.getElementById('image-preview');
+                const text = document.getElementById('secret-text').value;
+                
+                if (canvas.width === 0) {
+                    throw new Error('Пожалуйста, загрузите изображение');
+                }
+                
+                if (!text) {
+                    throw new Error('Пожалуйста, введите текст для скрытия');
+                }
+                
+                const ctx = canvas.getContext('2d');
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                // Преобразуем текст в бинарный формат + маркер конца
+                const encoder = new TextEncoder();
+                const binaryData = encoder.encode(text + '\0');
+                
+                // Проверяем, поместится ли текст
+                const maxLength = Math.floor(data.length / 4);
+                if (binaryData.length * 8 > maxLength) {
+                    throw new Error(`Текст слишком длинный. Максимум: ${Math.floor(maxLength / 8)} символов`);
+                }
+                
+                let dataIndex = 0;
+                
+                // LSB метод - заменяем младшие биты
+                for (let i = 0; i < binaryData.length; i++) {
+                    for (let j = 0; j < 8; j++) {
+                        if (dataIndex >= data.length) break;
+                        
+                        // Пропускаем альфа-канал
+                        if ((dataIndex + 1) % 4 === 0) {
+                            dataIndex++;
+                        }
+                        
+                        const bit = (binaryData[i] >> (7 - j)) & 1;
+                        data[dataIndex] = (data[dataIndex] & 0xFE) | bit;
+                        dataIndex++;
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                modifiedImageUrl = canvas.toDataURL('image/png');
+                document.getElementById('download-image-btn').style.display = 'inline-block';
+                
+                showMessage('image-message', 'Сообщение успешно спрятано в картинке!', 'success');
+            } catch (e) {
+                showMessage('image-message', 'Ошибка: ' + e.message, 'error');
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+        
+        // Извлечь текст из изображения
+        function extractTextFromImage() {
+            const btn = document.getElementById('extract-image-btn');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loading"></span> Обработка...';
+                
+                const canvas = document.getElementById('decode-image-preview');
+                const ctx = canvas.getContext('2d');
+                
+                if (canvas.width === 0) {
+                    throw new Error('Пожалуйста, загрузите изображение');
+                }
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                let binaryData = [];
+                let currentByte = 0;
+                let bitCount = 0;
+                let dataIndex = 0;
+                
+                // Читаем биты из изображения
+                while (dataIndex < data.length) {
+                    // Пропускаем альфа-канал
+                    if ((dataIndex + 1) % 4 === 0) {
+                        dataIndex++;
+                        continue;
+                    }
+                    
+                    const bit = data[dataIndex] & 1;
+                    currentByte = (currentByte << 1) | bit;
+                    bitCount++;
+                    dataIndex++;
+                    
+                    if (bitCount === 8) {
+                        if (currentByte === 0) break; // Маркер конца сообщения
+                        binaryData.push(currentByte);
+                        currentByte = 0;
+                        bitCount = 0;
+                    }
+                }
+                
+                const decoder = new TextDecoder();
+                const text = decoder.decode(new Uint8Array(binaryData));
+                
+                document.getElementById('extracted-text').value = text;
+                
+                if (text.length > 0) {
+                    showMessage('decode-message', 'Секретное сообщение найдено!', 'success');
+                } else {
+                    showMessage('decode-message', 'Не удалось найти сообщение', 'error');
+                }
+            } catch (e) {
+                showMessage('decode-message', 'Ошибка: ' + e.message, 'error');
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+        
+        function updateDemo() {
+            if (!demoImagesLoaded) return;
+
+            const slider = document.getElementById('stego-slider');
+            const value = slider.value;
+            const explanation = document.getElementById('stego-explanation');
+            const canvas = document.getElementById('stego-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Очищаем canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Загружаем исходное изображение котика
+            createDemoImages().then(() => {
+                // Получаем данные изображения
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+
+                // Создаем "секретное" изображение (просто текст)
+                const secretCanvas = document.createElement('canvas');
+                secretCanvas.width = canvas.width;
+                secretCanvas.height = canvas.height;
+                const secretCtx = secretCanvas.getContext('2d');
+
+                secretCtx.fillStyle = '#1A237E';
+                secretCtx.fillRect(0, 0, secretCanvas.width, secretCanvas.height);
+                secretCtx.fillStyle = '#FFFFFF';
+                secretCtx.font = '30px Arial';
+                secretCtx.textAlign = 'center';
+                secretCtx.fillText('ТОП СЕКРЕТНО', secretCanvas.width / 2, secretCanvas.height / 2 - 20);
+                secretCtx.fillText('МЯУ', secretCanvas.width / 2, secretCanvas.height / 2 + 20);
+
+                const secretData = secretCtx.getImageData(0, 0, secretCanvas.width, secretCanvas.height).data;
+
+                // Применяем эффект смешивания
+                for (let i = 0; i < data.length; i += 4) {
+                    const ratio = value / 100;
+                    data[i] = Math.round(data[i] * (1 - ratio) + secretData[i] * ratio);
+                    data[i + 1] = Math.round(data[i + 1] * (1 - ratio) + secretData[i + 1] * ratio);
+                    data[i + 2] = Math.round(data[i + 2] * (1 - ratio) + secretData[i + 2] * ratio);
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+            });
+
+            explanation.textContent = `На уровне ${value}% ${value < 50 ? 'преобладает котик' : 'преобладает скрытое сообщение'}.`;
+        }
+
+       document.getElementById('image-input').addEventListener('change', function(e) {
+    handleImageUpload(e, 'image-preview');
+});
+
+document.getElementById('decode-image-input').addEventListener('change', function(e) {
+    handleImageUpload(e, 'decode-image-preview');
+});
+
+        function handleImageUpload(e, canvasId) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Проверка размера файла (макс 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showMessage(canvasId === 'image-preview' ? 'image-message' : 'decode-message',
+                    'Файл слишком большой (макс 5MB)', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.getElementById(canvasId);
+                    const ctx = canvas.getContext('2d');
+
+                    // Сохраняем пропорции
+                    const ratio = Math.min(
+                        canvas.width / img.width,
+                        canvas.height / img.height
+                    );
+                    const width = img.width * ratio;
+                    const height = img.height * ratio;
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                };
+                img.onerror = function () {
+                    showMessage(canvasId === 'image-preview' ? 'image-message' : 'decode-message',
+                        'Ошибка загрузки изображения', 'error');
+                };
+                img.src = event.target.result;
+            };
+            reader.onerror = function () {
+                showMessage(canvasId === 'image-preview' ? 'image-message' : 'decode-message',
+                    'Ошибка чтения файла', 'error');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Скрыть текст в изображении (LSB метод)
+     function hideTextInText() {
+    const btn = document.getElementById('hide-text-btn');
+    const originalText = btn.textContent;
+
+    try {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading"></span> Обработка...';
+
+        const coverText = document.getElementById('cover-text').value;
+        const hiddenText = document.getElementById('hidden-text').value;
+
+        if (!coverText) throw new Error('Введите текст-контейнер');
+        if (!hiddenText) throw new Error('Введите секретное сообщение');
+
+        // Конвертируем сообщение в бинарную строку UTF-8
+        const encoder = new TextEncoder();
+        const encoded = encoder.encode(hiddenText + '\0'); // Добавляем null-terminator
+        let binaryStr = '';
+        encoded.forEach(byte => {
+            binaryStr += byte.toString(2).padStart(8, '0');
+        });
+
+        // Автоматически подбираем bitsPerChar (1-4) в зависимости от длины текста
+        const requiredBits = binaryStr.length;
+        const maxPossibleBits = coverText.length * 4;
+        let bitsPerChar = 4;
+        
+        if (requiredBits > maxPossibleBits) {
+            throw new Error(`Недостаточно места! Нужно минимум ${Math.ceil(requiredBits / 4)} символов в тексте-контейнере`);
+        }
+
+        // Подбираем оптимальное количество бит на символ
+        while (bitsPerChar > 1 && requiredBits > coverText.length * bitsPerChar) {
+            bitsPerChar--;
+        }
+
+        console.log(`Используем ${bitsPerChar} бит/символ, требуется ${requiredBits} бит, доступно ${coverText.length * bitsPerChar} бит`);
+
+        let result = [];
+        let binIndex = 0;
+        const zeroWidthSpace = '\u200B'; // 0
+        const zeroWidthJoiner = '\u200D'; // 1
+
+        // Разбиваем текст на массив символов для корректной обработки юникода
+        const coverChars = Array.from(coverText);
+        
+        for (let i = 0; i < coverChars.length; i++) {
+            // Добавляем текущий символ
+            result.push(coverChars[i]);
+            
+            // Вставляем биты после символа (только если есть что вставлять)
+            if (binIndex < binaryStr.length) {
+                for (let j = 0; j < bitsPerChar && binIndex < binaryStr.length; j++) {
+                    const bit = binaryStr[binIndex];
+                    result.push(bit === '1' ? zeroWidthJoiner : zeroWidthSpace);
+                    binIndex++;
+                }
+            }
+        }
+
+        const resultText = result.join('');
+        document.getElementById('result-text').value = resultText;
+        document.getElementById('copy-text-btn').style.display = 'inline-block';
+        
+        showMessage('text-message', 
+            `Сообщение успешно спрятано! (Использовано ${bitsPerChar} бит/символ)`, 
+            'success');
+
+    } catch (e) {
+        showMessage('text-message', 'Ошибка: ' + e.message, 'error');
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+
+function extractTextFromText() {
+    const btn = document.getElementById('extract-text-btn');
+    const originalText = btn.textContent;
+
+    try {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loading"></span> Обработка...';
+
+        const stegoText = document.getElementById('stego-text').value;
+        if (!stegoText) throw new Error('Введите текст с секретом');
+
+        // Собираем все невидимые символы
+        let binaryStr = '';
+        for (const char of stegoText) {
+            if (char === '\u200D') {
+                binaryStr += '1';
+            } else if (char === '\u200B') {
+                binaryStr += '0';
+            }
+        }
+
+        if (binaryStr.length === 0) {
+            throw new Error('Не найдено скрытых сообщений');
+        }
+
+        // Разбиваем на байты (по 8 бит) до null-terminator (00000000)
+        const bytes = [];
+        for (let i = 0; i + 8 <= binaryStr.length; i += 8) {
+            const byteStr = binaryStr.substr(i, 8);
+            if (byteStr === '00000000') break;
+            bytes.push(parseInt(byteStr, 2));
+        }
+
+        // Декодируем UTF-8
+        const decoder = new TextDecoder('utf-8');
+        const hiddenText = decoder.decode(new Uint8Array(bytes));
+
+        document.getElementById('found-text').value = hiddenText;
+        showMessage('decode-text-message', 'Сообщение найдено!', 'success');
+
+    } catch (e) {
+        showMessage('decode-text-message', 'Ошибка: ' + e.message, 'error');
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
+}
+        // Вспомогательные функции
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = 'message ' + type;
+            element.style.display = 'block';
+
+            // Автоматическое скрытие через 5 секунд
+            if (type === 'success') {
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function downloadImage() {
+            if (!modifiedImageUrl) return;
+
+            const link = document.createElement('a');
+            link.href = modifiedImageUrl;
+            link.download = 'secret-image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function copyResultText() {
+            const resultText = document.getElementById('result-text');
+            resultText.select();
+            document.execCommand('copy');
+
+            // Визуальное подтверждение
+            const btn = document.getElementById('copy-text-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Скопировано!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+
+            showMessage('text-message', 'Текст скопирован в буфер обмена!', 'success');
+        }
+
+        function showSpacesExercise() {
+            const text = document.getElementById('hidden-text-exercise').textContent;
+            const visualization = document.getElementById('space-visualization-exercise');
+
+            let html = '<div style="font-family:monospace; white-space:pre; background:var(--dark); padding:10px; border-radius:5px; margin-bottom:10px;">';
+
+            // Разбиваем текст на слова и пробелы
+            text.split(/(\s+)/).forEach((part, i) => {
+                if (part.match(/\S/)) { // Это слово
+                    html += `<span style="color:var(--secondary);"></span>${part}`;
+                } else if (part.match(/\s/)) { // Это пробелы
+                    const spaceCount = part.length;
+                    const spaces = '·'.repeat(spaceCount);
+                    html += `<span style="background:${spaceCount > 1 ? 'var(--accent)' : 'var(--dark)'}; color:${spaceCount > 1 ? 'white' : '#aaa'}; border-radius:2px;">${spaces}</span>`;
+                }
+            });
+
+            html += '</div>';
+            html += '<p style="font-size:0.9em; color:var(--text);">· = один пробел (серый = 0, фиолетовый = 1)</p>';
+            visualization.innerHTML = html;
+            visualization.style.display = 'block';
+        }
+
+        function countSpacesForMeExercise() {
+            const text = document.getElementById('hidden-text-exercise').textContent.trim();
+            const spaceGroups = text.split(/\S+/).slice(1); // Получаем все группы пробелов
+
+            // Правильная битовая последовательность для "Мяу" в Windows-1251
+            const correctBinary = '11001101110000011111101011110101';
+            let binaryString = '';
+            let resultMessage = '';
+
+            // Создаем правильную последовательность
+            for (let i = 0; i < spaceGroups.length; i++) {
+                if (i < correctBinary.length) {
+                    const bit = correctBinary[i];
+                    binaryString += bit + ' ';
+                }
+            }
+
+            binaryString = binaryString.trim().replace(/(\d{8})/g, '$1 ').trim();
+            document.getElementById('binary-code-exercise').value = binaryString;
+        }
+
+        function decodeBinaryExercise() {
+            const binaryInput = document.getElementById('binary-code-exercise').value.replace(/\s/g, '');
+            let result = '';
+
+            // Специальная таблица для русских букв в Windows-1251
+            const cp1251 = {
+                '11001101': 'М',
+                '11000001': 'я',
+                '11111010': 'у'
+            };
+
+            // Разбиваем на байты (по 8 бит)
+            for (let i = 0; i < binaryInput.length; i += 8) {
+                const byte = binaryInput.substr(i, 8);
+                if (byte.length < 8) continue;
+
+                // Проверяем специальные русские символы
+                if (cp1251[byte]) {
+                    result += cp1251[byte];
+                } else {
+                    // Для остальных символов используем стандартное декодирование
+                    const charCode = parseInt(byte, 2);
+                    result += String.fromCharCode(charCode);
+                }
+            }
+
+            const messageDiv = document.getElementById('decoded-message-exercise');
+            if (result) {
+                messageDiv.innerHTML = `<div class="message success"><strong>Результат:</strong> ${result}</div>`;
+            } else {
+                messageDiv.innerHTML = '<div class="message error">Ошибка! Проверь введенный двоичный код</div>';
+            }
+        }
+    </script>
+</body>
+
+</html>
